@@ -1,6 +1,7 @@
 package main
 
 import (
+	"chat/types"
 	"net/http"
 	"strconv"
 
@@ -11,12 +12,13 @@ func main() {
 	go h.run()
 	router := gin.New()
 	router.LoadHTMLFiles("index.html")
-	router.GET("/rooms/:roomId", func(c *gin.Context) {
+	router.GET("/history/:roomId", func(c *gin.Context) {
 		roomId := c.Param("roomId")
 		query := c.Request.URL.Query()
 		offset := 0
 		limit := 100
-		msgLen := h.history[roomId].Total
+		history := h.storage.LoadMessageHistory(roomId)
+		msgLen := history.Total
 		if limit > msgLen {
 			limit = msgLen
 		}
@@ -34,9 +36,9 @@ func main() {
 			}
 		}
 		c.IndentedJSON(http.StatusOK,
-			MessageHistory{
-				Data:  h.history[roomId].Data[offset : offset+limit],
-				Total: len(h.history[roomId].Data),
+			types.MessageHistory{
+				Data:  history.Data[offset : offset+limit],
+				Total: len(history.Data),
 			})
 	})
 

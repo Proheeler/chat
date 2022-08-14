@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 type message struct {
 	data []byte
 	room string
@@ -24,6 +26,8 @@ type hub struct {
 
 	// Unregister requests from connections.
 	unregister chan subscription
+	messages   map[string][]string
+	history    map[string]MessageHistory
 }
 
 var h = hub{
@@ -31,6 +35,8 @@ var h = hub{
 	register:   make(chan subscription),
 	unregister: make(chan subscription),
 	rooms:      make(map[string]map[*connection]bool),
+	messages:   map[string][]string{},
+	history:    map[string]MessageHistory{},
 }
 
 func (h *hub) run() {
@@ -59,6 +65,15 @@ func (h *hub) run() {
 			for c := range connections {
 				select {
 				case c.send <- m.data:
+					h.history[m.room] = MessageHistory{
+						Data: append(h.history[m.room].Data, Message{
+							From: "",
+							To:   "",
+							Data: string(m.data),
+							Time: time.Now(),
+						}),
+						Total: h.history[m.room].Total + 1,
+					}
 				default:
 					close(c.send)
 					delete(connections, c)

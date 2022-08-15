@@ -3,10 +3,11 @@ package types
 import "time"
 
 type Message struct {
-	From string
-	To   string
-	Data string
-	Time time.Time
+	Sender      string
+	ReplyTo     string
+	Data        string
+	Time        time.Time
+	Attachments []Media
 }
 
 type MessageHistory struct {

@@ -12,7 +12,7 @@ func main() {
 	go h.run()
 	router := gin.New()
 	router.LoadHTMLFiles("index.html")
-	router.GET("/history/:roomId", func(c *gin.Context) {
+	router.GET("/rooms/history/:roomId", func(c *gin.Context) {
 		roomId := c.Param("roomId")
 		query := c.Request.URL.Query()
 		offset := 0
@@ -42,8 +42,25 @@ func main() {
 			})
 	})
 
-	router.GET("/room/:roomId", func(c *gin.Context) {
+	router.GET("/rooms/:roomId", func(c *gin.Context) {
 		c.HTML(200, "index.html", nil)
+	})
+
+	router.GET("/rooms", func(c *gin.Context) {
+		c.IndentedJSON(http.StatusOK, h.storage.ListRooms())
+	})
+
+	router.GET("/rooms/search", func(c *gin.Context) {
+		query := c.Request.URL.Query()
+		value := query.Get("value")
+		room := query.Get("room")
+		if value == "" {
+			c.IndentedJSON(http.StatusBadRequest, nil)
+		}
+		if room == "" {
+			c.IndentedJSON(http.StatusOK, h.storage.GlobalSearch(value))
+		}
+		c.IndentedJSON(http.StatusOK, h.storage.Search(value, room))
 	})
 
 	router.GET("/ws/:roomId", func(c *gin.Context) {

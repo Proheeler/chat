@@ -70,10 +70,10 @@ func (h *hub) run() {
 				select {
 				case c.send <- m.data:
 					h.storage.StoreMessage(types.Message{
-						From: "",
-						To:   "",
-						Data: string(m.data),
-						Time: time.Now(),
+						Sender:  "",
+						ReplyTo: "",
+						Data:    string(m.data),
+						Time:    time.Now(),
 					}, m.room)
 				default:
 					close(c.send)

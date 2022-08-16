@@ -18,13 +18,15 @@ type MessageStorage interface {
 }
 
 type ParticipantStorage interface {
-	StoreParticipant(patricipant types.Person, room string)
+	StoreParticipant(participant types.Person, room string)
 	LoadParticipants(room string) types.PersonList
 	DeleteParticipant(uid, room string)
 }
 
 type RoomsStorage interface {
 	ListRooms() []string
+	CheckRoom(room string) bool
+	AddRoom(room string)
 }
 
 type Searcher interface {

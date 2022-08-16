@@ -3,6 +3,8 @@ package logic
 import (
 	"chat/internal/storage"
 	"chat/internal/types"
+	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -76,13 +78,15 @@ func (h *Hub) Run() {
 			for c := range connections {
 				select {
 				case c.send <- m.data:
-					h.storage.StoreMessage(types.Message{
-						Sender:       "",
-						ReplyTo:      "",
-						Data:         string(m.data),
-						CreationTime: time.Now(),
-						EditTime:     time.Now(),
-					}, m.room)
+					msg := &types.Message{}
+					err := json.Unmarshal(m.data, msg)
+					if err != nil {
+						fmt.Print(err.Error())
+						break
+					}
+					msg.CreationTime = time.Now()
+					msg.EditTime = time.Now()
+					h.storage.StoreMessage(*msg, m.room)
 				default:
 					close(c.send)
 					delete(connections, c)

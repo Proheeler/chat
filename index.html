@@ -23,7 +23,7 @@
                 if (!msg.value) {
                     return false;
                 }
-                conn.send(msg.value);
+                conn.send('{"Sender":"test_uid","Data":"'+msg.value+'"}');
                 msg.value = "";
                 return false;
             };

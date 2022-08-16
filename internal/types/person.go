@@ -2,6 +2,7 @@ package types
 
 type Person struct {
 	ClientID string
+	CrmID    string
 	Name     string
 	Surname  string
 }

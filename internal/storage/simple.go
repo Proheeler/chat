@@ -3,6 +3,8 @@ package storage
 import (
 	"chat/internal/types"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type SimpleStorage struct {
@@ -78,6 +80,21 @@ func (s *SimpleStorage) ListRooms() []string {
 	return keys
 }
 
+func (s *SimpleStorage) CheckRoom(room string) bool {
+	_, ok := s.rooms[room]
+	return ok
+}
+
+func (s *SimpleStorage) AddRoom(room string) {
+	s.rooms[room] = types.Room{
+		ID:             uuid.New().String(),
+		Name:           room,
+		Participants:   []types.Person{},
+		PinnedMessages: []string{},
+		History:        &types.MessageHistory{},
+	}
+}
+
 func (s *SimpleStorage) StoreParticipant(patricipant types.Person, room string) {
 	rm := s.rooms[room]
 	rm.Participants = append(s.rooms[room].Participants, patricipant)
@@ -91,14 +108,13 @@ func (s *SimpleStorage) LoadParticipants(room string) types.PersonList {
 }
 func (s *SimpleStorage) DeleteParticipant(uid, room string) {
 	pl := s.rooms[room].Participants
+	rm := s.rooms[room]
 	for i := range pl {
 		if pl[i].ClientID == uid {
-			RemoveIndex(pl, i)
+			rm.Participants = RemoveIndex(pl, i)
 			break
 		}
 	}
-	rm := s.rooms[room]
-	rm.Participants = pl
 	s.rooms[room] = rm
 }
 

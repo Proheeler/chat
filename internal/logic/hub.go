@@ -1,8 +1,8 @@
-package main
+package logic
 
 import (
-	"chat/storage"
-	"chat/types"
+	"chat/internal/storage"
+	"chat/internal/types"
 	"time"
 )
 
@@ -11,14 +11,15 @@ type message struct {
 	room string
 }
 
-type subscription struct {
+type Subscription struct {
 	conn *connection
 	room string
+	h    *Hub
 }
 
-// hub maintains the set of active connections and broadcasts messages to the
+// Hub maintains the set of active connections and broadcasts messages to the
 // connections.
-type hub struct {
+type Hub struct {
 	// Registered connections.
 	rooms map[string]map[*connection]bool
 
@@ -26,24 +27,30 @@ type hub struct {
 	broadcast chan message
 
 	// Register requests from the connections.
-	register chan subscription
+	register chan Subscription
 
 	// Unregister requests from connections.
-	unregister chan subscription
+	unregister chan Subscription
 	messages   map[string][]string
 	storage    storage.Storage
 }
 
-var h = hub{
-	broadcast:  make(chan message),
-	register:   make(chan subscription),
-	unregister: make(chan subscription),
-	rooms:      make(map[string]map[*connection]bool),
-	messages:   map[string][]string{},
-	storage:    storage.NewSimpleStorage(),
+func NewHub() *Hub {
+	return &Hub{
+		broadcast:  make(chan message),
+		register:   make(chan Subscription),
+		unregister: make(chan Subscription),
+		rooms:      make(map[string]map[*connection]bool),
+		messages:   map[string][]string{},
+		storage:    storage.NewSimpleStorage(),
+	}
 }
 
-func (h *hub) run() {
+func (h *Hub) Storage() storage.Storage {
+	return h.storage
+}
+
+func (h *Hub) Run() {
 	for {
 		select {
 		case s := <-h.register:
@@ -70,10 +77,10 @@ func (h *hub) run() {
 				select {
 				case c.send <- m.data:
 					h.storage.StoreMessage(types.Message{
-						Sender:  "",
-						ReplyTo: "",
-						Data:    string(m.data),
-						Time:    time.Now(),
+						Sender:       "",
+						ReplyTo:      "",
+						Data:         string(m.data),
+						CreationTime: time.Now(),
 					}, m.room)
 				default:
 					close(c.send)

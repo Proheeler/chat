@@ -1,4 +1,4 @@
-package main
+package logic
 
 import (
 	"log"
@@ -37,10 +37,10 @@ type connection struct {
 }
 
 // readPump pumps messages from the websocket connection to the hub.
-func (s subscription) readPump() {
+func (s Subscription) readPump() {
 	c := s.conn
 	defer func() {
-		h.unregister <- s
+		s.h.unregister <- s
 		c.ws.Close()
 	}()
 	c.ws.SetReadLimit(maxMessageSize)
@@ -55,7 +55,7 @@ func (s subscription) readPump() {
 			break
 		}
 		m := message{msg, s.room}
-		h.broadcast <- m
+		s.h.broadcast <- m
 	}
 }
 
@@ -66,7 +66,7 @@ func (c *connection) write(mt int, payload []byte) error {
 }
 
 // writePump pumps messages from the hub to the websocket connection.
-func (s *subscription) writePump() {
+func (s *Subscription) writePump() {
 	c := s.conn
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -92,7 +92,7 @@ func (s *subscription) writePump() {
 }
 
 // serveWs handles websocket requests from the peer.
-func serveWs(w http.ResponseWriter, r *http.Request, roomId string) {
+func ServeWs(w http.ResponseWriter, r *http.Request, roomId string, hub *Hub) {
 	// fmt.Print(roomId)
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -100,8 +100,8 @@ func serveWs(w http.ResponseWriter, r *http.Request, roomId string) {
 		return
 	}
 	c := &connection{send: make(chan []byte, 256), ws: ws}
-	s := subscription{c, roomId}
-	h.register <- s
+	s := Subscription{c, roomId, hub}
+	s.h.register <- s
 	go s.writePump()
 	go s.readPump()
 }

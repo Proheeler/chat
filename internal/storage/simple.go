@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"chat/types"
+	"chat/internal/types"
 	"strings"
 )
 
@@ -25,6 +25,15 @@ func (s *SimpleStorage) StoreMessage(msg types.Message, room string) {
 
 func (s *SimpleStorage) LoadMessageHistory(room string) types.MessageHistory {
 	return s.History[room]
+}
+
+func (s *SimpleStorage) EditMessage(msg types.Message, room string) {
+	history := s.History[room]
+	for i := range history.Data {
+		if history.Data[i].ID == msg.ID {
+			history.Data[i] = msg
+		}
+	}
 }
 
 func (s *SimpleStorage) Search(val, room string) []int {

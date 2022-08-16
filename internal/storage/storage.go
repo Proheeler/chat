@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"chat/types"
+	"chat/internal/types"
 )
 
 type Storage interface {
@@ -14,6 +14,7 @@ type Storage interface {
 type MessageStorage interface {
 	StoreMessage(msg types.Message, room string)
 	LoadMessageHistory(room string) types.MessageHistory
+	EditMessage(msg types.Message, room string)
 }
 
 type ParticipantStorage interface {

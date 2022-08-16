@@ -5,5 +5,5 @@ type Room struct {
 	Name           string
 	Participants   []Person
 	PinnedMessages []string
-	History        MessageHistory
+	History        *MessageHistory
 }

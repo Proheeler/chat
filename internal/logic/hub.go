@@ -81,6 +81,7 @@ func (h *Hub) Run() {
 						ReplyTo:      "",
 						Data:         string(m.data),
 						CreationTime: time.Now(),
+						EditTime:     time.Now(),
 					}, m.room)
 				default:
 					close(c.send)

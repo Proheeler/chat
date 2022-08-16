@@ -13,7 +13,7 @@ type Storage interface {
 
 type MessageStorage interface {
 	StoreMessage(msg types.Message, room string)
-	LoadMessageHistory(room string) types.MessageHistory
+	LoadMessageHistory(room string) *types.MessageHistory
 	EditMessage(msg types.Message, room string)
 }
 

@@ -61,9 +61,11 @@ func (a *App) Run() {
 		room := query.Get("room")
 		if value == "" {
 			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
 		}
 		if room == "" {
 			c.IndentedJSON(http.StatusOK, a.H.Storage().GlobalSearch(value))
+			return
 		}
 		c.IndentedJSON(http.StatusOK, a.H.Storage().Search(value, room))
 	})

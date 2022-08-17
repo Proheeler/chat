@@ -2,6 +2,7 @@ package logic
 
 import (
 	"chat/internal/storage"
+	"chat/internal/storage/simple"
 	"chat/internal/types"
 	"encoding/json"
 	"fmt"
@@ -44,7 +45,7 @@ func NewHub() *Hub {
 		unregister: make(chan Subscription),
 		rooms:      make(map[string]map[*connection]bool),
 		messages:   map[string][]string{},
-		storage:    storage.NewSimpleStorage(),
+		storage:    simple.NewSimpleStorage(),
 	}
 }
 

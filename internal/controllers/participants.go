@@ -31,8 +31,8 @@ func createParticipant(store storage.Storage, router *gin.Engine) {
 		}
 		id := uuid.New()
 		pers.ID = id.String()
-		pers.CreateAt = time.Now()
-		pers.UpdateAt = time.Now()
+		pers.CreatedAt = time.Now()
+		pers.UpdatedAt = time.Now()
 		store.StoreParticipant(*pers, room)
 		c.IndentedJSON(http.StatusCreated, nil)
 	})

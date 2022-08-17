@@ -7,8 +7,8 @@ type Client struct {
 	ExternalID string
 	Name       string
 	Surname    string
-	CreateAt   time.Time `json:"create_at,omitempty"`
-	UpdateAt   time.Time `json:"update_at,omitempty"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
 
 type ClientList struct {

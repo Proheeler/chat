@@ -18,9 +18,10 @@ type MessageStorage interface {
 }
 
 type ParticipantStorage interface {
-	StoreParticipant(participant types.Person, room string)
-	LoadParticipants(room string) types.PersonList
+	StoreParticipant(participant types.Client, room string)
+	LoadParticipants(room string) types.ClientList
 	DeleteParticipant(uid, room string)
+	EditParticipant(participant types.Client, room string)
 }
 
 type RoomsStorage interface {

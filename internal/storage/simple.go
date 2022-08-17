@@ -89,28 +89,38 @@ func (s *SimpleStorage) AddRoom(room string) {
 	s.rooms[room] = types.Room{
 		ID:             uuid.New().String(),
 		Name:           room,
-		Participants:   []types.Person{},
+		Participants:   []types.Client{},
 		PinnedMessages: []string{},
 		History:        &types.MessageHistory{},
 	}
 }
 
-func (s *SimpleStorage) StoreParticipant(patricipant types.Person, room string) {
+func (s *SimpleStorage) StoreParticipant(patricipant types.Client, room string) {
 	rm := s.rooms[room]
 	rm.Participants = append(s.rooms[room].Participants, patricipant)
 	s.rooms[room] = rm
 }
-func (s *SimpleStorage) LoadParticipants(room string) types.PersonList {
-	return types.PersonList{
+func (s *SimpleStorage) LoadParticipants(room string) types.ClientList {
+	return types.ClientList{
 		Data:  s.rooms[room].Participants,
 		Total: len(s.rooms[room].Participants),
 	}
 }
+
+func (s *SimpleStorage) EditParticipant(participant types.Client, room string) {
+	// pl := s.rooms[room].Participants
+	// for i := range pl {
+	// 	if pl[i].ID == participant.ID {
+	// 		s.rooms[room].Participants[i] = participant
+	// 	}
+	// }
+}
+
 func (s *SimpleStorage) DeleteParticipant(uid, room string) {
 	pl := s.rooms[room].Participants
 	rm := s.rooms[room]
 	for i := range pl {
-		if pl[i].ClientID == uid {
+		if pl[i].ID == uid {
 			rm.Participants = RemoveIndex(pl, i)
 			break
 		}
@@ -118,6 +128,6 @@ func (s *SimpleStorage) DeleteParticipant(uid, room string) {
 	s.rooms[room] = rm
 }
 
-func RemoveIndex(s []types.Person, index int) []types.Person {
+func RemoveIndex(s []types.Client, index int) []types.Client {
 	return append(s[:index], s[index+1:]...)
 }

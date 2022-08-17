@@ -3,7 +3,7 @@ package types
 type Room struct {
 	ID             string
 	Name           string
-	Participants   []Person
+	Participants   []Client
 	PinnedMessages []string
 	History        *MessageHistory
 }

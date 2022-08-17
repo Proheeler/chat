@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -89,6 +90,7 @@ func (a *App) Run() {
 		c.IndentedJSON(http.StatusOK, a.H.Storage().ListRooms())
 	})
 
+	// Participants
 	router.GET("/rooms/:roomId/participants", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !a.H.Storage().CheckRoom(room) {
@@ -108,15 +110,36 @@ func (a *App) Run() {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
-		pers := &types.Person{}
+		pers := &types.Client{}
 		err = json.Unmarshal(jsonData, pers)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 		id := uuid.New()
-		pers.ClientID = id.String()
+		pers.ID = id.String()
+		pers.CreateAt = time.Now()
+		pers.UpdateAt = time.Now()
 		a.H.Storage().StoreParticipant(*pers, room)
-		c.IndentedJSON(http.StatusCreated, *pers)
+		c.IndentedJSON(http.StatusCreated, nil)
+	})
+
+	router.PATCH("/rooms/:roomId/participants", func(c *gin.Context) {
+		room := c.Param("roomId")
+		if !a.H.Storage().CheckRoom(room) {
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
+		jsonData, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		pers := &types.Client{}
+		err = json.Unmarshal(jsonData, pers)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		a.H.Storage().EditParticipant(*pers, room)
+		c.IndentedJSON(http.StatusOK, nil)
 	})
 
 	router.DELETE("/rooms/:roomId/participants", func(c *gin.Context) {
@@ -135,6 +158,11 @@ func (a *App) Run() {
 
 	router.GET("/ws/:roomId", func(c *gin.Context) {
 		roomId := c.Param("roomId")
+		// if !a.H.Storage().CheckRoom(roomId) {
+		// 	c.IndentedJSON(http.StatusBadRequest, nil)
+		// 	return
+		// }
+		// check for client in body + check if client can connect to room
 		a.H.Storage().AddRoom(roomId)
 		logic.ServeWs(c.Writer, c.Request, roomId, a.H)
 	})

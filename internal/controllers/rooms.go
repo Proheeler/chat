@@ -34,7 +34,6 @@ func createRoom(store storage.Storage, router *gin.Engine) {
 		room.UpdatedAt = time.Now()
 		room.Participants = []types.Client{}
 		room.PinnedMessages = []string{}
-		room.History = &types.MessageHistory{}
 		store.AddRoom(room)
 		c.IndentedJSON(http.StatusCreated, nil)
 	})
@@ -93,7 +92,7 @@ func listRooms(store storage.Storage, router *gin.Engine) {
 	})
 }
 
-func AddRoomCRUD(store storage.Storage, router *gin.Engine) {
+func AddRoomCRUDL(store storage.Storage, router *gin.Engine) {
 	createRoom(store, router)
 	readRoom(store, router)
 	updateRoom(store, router)

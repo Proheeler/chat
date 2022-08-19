@@ -6,7 +6,6 @@ type Room struct {
 	ShortRoomInfo
 	Participants   []Client
 	PinnedMessages []string
-	History        *MessageHistory
 }
 
 type ShortRoomInfo struct {

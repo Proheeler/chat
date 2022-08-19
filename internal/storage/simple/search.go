@@ -4,8 +4,8 @@ import "strings"
 
 func (s *SimpleStorage) Search(val, room string) []int {
 	ret := []int{}
-	for i := range s.rooms[room].History.Data {
-		if strings.Contains(s.rooms[room].History.Data[i].Data, val) {
+	for i := range s.history[room].Data {
+		if strings.Contains(s.history[room].Data[i].Data, val) {
 			ret = append(ret, i)
 		}
 	}
@@ -13,9 +13,9 @@ func (s *SimpleStorage) Search(val, room string) []int {
 }
 func (s *SimpleStorage) GlobalSearch(val string) map[string][]int {
 	ret := map[string][]int{}
-	for k := range s.rooms {
-		for i := range s.rooms[k].History.Data {
-			if strings.Contains(s.rooms[k].History.Data[i].Data, val) {
+	for k := range s.history {
+		for i := range s.history[k].Data {
+			if strings.Contains(s.history[k].Data[i].Data, val) {
 				ret[k] = append(ret[k], i)
 			}
 		}

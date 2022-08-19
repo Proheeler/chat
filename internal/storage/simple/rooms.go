@@ -42,7 +42,6 @@ func (s *SimpleStorage) EditRoom(room *types.Room) {
 		},
 		Participants:   s.rooms[room.Name].Participants,
 		PinnedMessages: s.rooms[room.Name].PinnedMessages,
-		History:        s.rooms[room.Name].History,
 	}
 }
 

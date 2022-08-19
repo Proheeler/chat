@@ -5,11 +5,13 @@ import (
 )
 
 type SimpleStorage struct {
-	rooms map[string]types.Room
+	rooms   map[string]types.Room
+	history map[string]*types.MessageHistory
 }
 
 func NewSimpleStorage() *SimpleStorage {
 	return &SimpleStorage{
-		rooms: map[string]types.Room{},
+		rooms:   map[string]types.Room{},
+		history: map[string]*types.MessageHistory{},
 	}
 }

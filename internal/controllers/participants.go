@@ -38,14 +38,31 @@ func createParticipant(store storage.Storage, router *gin.Engine) {
 	})
 }
 
-func readParticipant(store storage.Storage, router *gin.Engine) {
+func listParticipants(store storage.Storage, router *gin.Engine) {
 	router.GET("/rooms/:roomId/participants", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
-		c.IndentedJSON(http.StatusOK, store.LoadParticipants(room))
+		c.IndentedJSON(http.StatusOK, store.ListParticipants(room))
+	})
+}
+
+func readParticipant(store storage.Storage, router *gin.Engine) {
+	router.GET("/rooms/:roomId/participants/:id", func(c *gin.Context) {
+		room := c.Param("roomId")
+		if !store.CheckRoom(room) {
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
+		clientID := c.Param("id")
+		part := store.GetParticipant(room, clientID)
+		if part.ID == "" {
+			c.IndentedJSON(http.StatusNotFound, nil)
+			return
+		}
+		c.IndentedJSON(http.StatusOK, part)
 	})
 }
 func updateParticipant(store storage.Storage, router *gin.Engine) {
@@ -83,9 +100,10 @@ func deleteParticipant(store storage.Storage, router *gin.Engine) {
 	})
 }
 
-func AddParticipantCRUD(store storage.Storage, router *gin.Engine) {
+func AddParticipantCRUDL(store storage.Storage, router *gin.Engine) {
 	createParticipant(store, router)
 	readParticipant(store, router)
 	updateParticipant(store, router)
 	deleteParticipant(store, router)
+	listParticipants(store, router)
 }

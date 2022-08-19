@@ -30,6 +30,10 @@ func (s *SimpleStorage) GetRoom(room string) *types.Room {
 
 func (s *SimpleStorage) AddRoom(room *types.Room) {
 	s.rooms[room.Name] = *room
+	s.history[room.Name] = &types.MessageHistory{
+		Total: 0,
+		Data:  []types.Message{},
+	}
 }
 
 func (s *SimpleStorage) EditRoom(room *types.Room) {

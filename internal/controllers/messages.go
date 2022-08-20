@@ -13,7 +13,7 @@ import (
 )
 
 func listMessages(store storage.Storage, router *gin.Engine) {
-	router.GET("/rooms/:roomId/messages", func(c *gin.Context) {
+	router.GET("/v1/rooms/:roomId/messages", func(c *gin.Context) {
 		roomId := c.Param("roomId")
 		fmt.Println(roomId)
 		if !store.CheckRoom(roomId) {
@@ -55,7 +55,7 @@ func listMessages(store storage.Storage, router *gin.Engine) {
 }
 
 func readMessage(store storage.Storage, router *gin.Engine) {
-	router.GET("/rooms/:roomId/messages/:id", func(c *gin.Context) {
+	router.GET("/v1/rooms/:roomId/messages/:id", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
@@ -71,7 +71,7 @@ func readMessage(store storage.Storage, router *gin.Engine) {
 	})
 }
 func updateMessage(store storage.Storage, router *gin.Engine) {
-	router.PATCH("/rooms/:roomId/messages", func(c *gin.Context) {
+	router.PATCH("/v1/rooms/:roomId/messages", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
@@ -92,7 +92,7 @@ func updateMessage(store storage.Storage, router *gin.Engine) {
 }
 
 func deleteMessage(store storage.Storage, router *gin.Engine) {
-	router.DELETE("/rooms/:roomId/messages", func(c *gin.Context) {
+	router.DELETE("/v1/rooms/:roomId/messages", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)

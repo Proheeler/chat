@@ -14,7 +14,7 @@ import (
 )
 
 func createParticipant(store storage.Storage, router *gin.Engine) {
-	router.POST("/rooms/:roomId/participants", func(c *gin.Context) {
+	router.POST("/v1/rooms/:roomId/participants", func(c *gin.Context) {
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -39,7 +39,7 @@ func createParticipant(store storage.Storage, router *gin.Engine) {
 }
 
 func listParticipants(store storage.Storage, router *gin.Engine) {
-	router.GET("/rooms/:roomId/participants", func(c *gin.Context) {
+	router.GET("/v1/rooms/:roomId/participants", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
@@ -50,7 +50,7 @@ func listParticipants(store storage.Storage, router *gin.Engine) {
 }
 
 func readParticipant(store storage.Storage, router *gin.Engine) {
-	router.GET("/rooms/:roomId/participants/:id", func(c *gin.Context) {
+	router.GET("/v1/rooms/:roomId/participants/:id", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
@@ -66,7 +66,7 @@ func readParticipant(store storage.Storage, router *gin.Engine) {
 	})
 }
 func updateParticipant(store storage.Storage, router *gin.Engine) {
-	router.PATCH("/rooms/:roomId/participants", func(c *gin.Context) {
+	router.PATCH("/v1/rooms/:roomId/participants", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
@@ -87,7 +87,7 @@ func updateParticipant(store storage.Storage, router *gin.Engine) {
 }
 
 func deleteParticipant(store storage.Storage, router *gin.Engine) {
-	router.DELETE("/rooms/:roomId/participants", func(c *gin.Context) {
+	router.DELETE("/v1/rooms/:roomId/participants", func(c *gin.Context) {
 		room := c.Param("roomId")
 		if !store.CheckRoom(room) {
 			c.IndentedJSON(http.StatusBadRequest, nil)

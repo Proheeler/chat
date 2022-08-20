@@ -8,7 +8,7 @@ import (
 )
 
 func AddSearch(store storage.Storage, router *gin.Engine) {
-	router.GET("/rooms/search", func(ctx *gin.Context) {
+	router.GET("/v1/rooms/search", func(ctx *gin.Context) {
 		searchHandler(store, ctx)
 	})
 }

@@ -17,7 +17,7 @@ func (a *App) Run() {
 	router := gin.New()
 	router.LoadHTMLFiles("index.html")
 
-	router.GET("/rooms/test/:roomId", func(c *gin.Context) {
+	router.GET("/v1/rooms/test/:roomId", func(c *gin.Context) {
 		c.HTML(200, "index.html", nil)
 	})
 
@@ -40,5 +40,5 @@ func (a *App) Run() {
 		logic.ServeWs(c.Writer, c.Request, roomId, a.H)
 	})
 
-	router.Run("0.0.0.0:8080")
+	router.Run("0.0.0.0:9080")
 }

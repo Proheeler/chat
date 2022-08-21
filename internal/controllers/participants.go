@@ -57,7 +57,7 @@ func readParticipant(store storage.Storage, router *gin.Engine) {
 			return
 		}
 		clientID := c.Param("id")
-		part := store.GetParticipant(room, clientID)
+		part := store.GetParticipant(clientID, room)
 		if part.ID == "" {
 			c.IndentedJSON(http.StatusNotFound, nil)
 			return

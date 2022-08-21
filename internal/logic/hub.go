@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type message struct {
@@ -85,6 +87,7 @@ func (h *Hub) Run() {
 						fmt.Print(err.Error())
 						break
 					}
+					msg.ID = uuid.New().String()
 					msg.CreationTime = time.Now()
 					msg.EditTime = time.Now()
 					h.storage.StoreMessage(*msg, m.room)

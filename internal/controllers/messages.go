@@ -15,7 +15,6 @@ import (
 func listMessages(store storage.Storage, router *gin.Engine) {
 	router.GET("/v1/rooms/:roomId/messages", func(c *gin.Context) {
 		roomId := c.Param("roomId")
-		fmt.Println(roomId)
 		if !store.CheckRoom(roomId) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return

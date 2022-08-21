@@ -23,12 +23,14 @@ func (a *App) Run() {
 
 	// Participants
 	controllers.AddParticipantCRUDL(a.H.Storage(), router)
+	controllers.AddRoomParticipantCDL(a.H.Storage(), router)
+
 	// Search
 	controllers.AddSearch(a.H.Storage(), router)
 	// Rooms
 	controllers.AddRoomCRUDL(a.H.Storage(), router)
 	// messages
-	controllers.AddMessagesRUDL(a.H.Storage(), router)
+	controllers.AddMessagesRUL(a.H.Storage(), router)
 	router.GET("/ws/:roomId", func(c *gin.Context) {
 		roomId := c.Param("roomId")
 		if !a.H.Storage().CheckRoom(roomId) {

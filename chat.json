@@ -11,6 +11,107 @@
 				"method": "GET",
 				"header": [],
 				"url": {
+					"raw": "localhost:9080/v1/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getParticipant",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/participants/2248f05c-f55f-4ec0-bfc6-815a77348640",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"participants",
+						"2248f05c-f55f-4ec0-bfc6-815a77348640"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteParticipant",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/participants?id=d1181032-09a9-4063-887d-97dcf6ddc642",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"participants"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "d1181032-09a9-4063-887d-97dcf6ddc642"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postParticipant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ExternalID\": \"id\",\n    \"Name\": \"test_name\",\n    \"Surname\": \"test_surname\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/v1/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postRoomParticipant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ID\":\"f750eaa4-c9e7-4719-8dd5-f0ff8609e48e\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
 					"raw": "localhost:9080/v1/rooms/t/participants",
 					"host": [
 						"localhost"
@@ -27,12 +128,12 @@
 			"response": []
 		},
 		{
-			"name": "deleteParticipant",
+			"name": "listRoomParticipants",
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:9080/v1/rooms/1/participants?id=a1ded7cb-775b-4f5b-803d-458a93f5823f",
+					"raw": "localhost:9080/v1/rooms/t/participants/",
 					"host": [
 						"localhost"
 					],
@@ -40,35 +141,21 @@
 					"path": [
 						"v1",
 						"rooms",
-						"1",
-						"participants"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "a1ded7cb-775b-4f5b-803d-458a93f5823f"
-						}
+						"t",
+						"participants",
+						""
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "postParticipant",
+			"name": "deleteRoomParticipant",
 			"request": {
-				"method": "POST",
+				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"CrmID\": \"id\",\n    \"Name\": \"test_name\",\n    \"Surname\": \"test_surname\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "localhost:9080/v1/rooms/1/participants",
+					"raw": "localhost:9080/v1/rooms/t/participants?id=f750eaa4-c9e7-4719-8dd5-f0ff8609e48e",
 					"host": [
 						"localhost"
 					],
@@ -76,8 +163,14 @@
 					"path": [
 						"v1",
 						"rooms",
-						"1",
+						"t",
 						"participants"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "f750eaa4-c9e7-4719-8dd5-f0ff8609e48e"
+						}
 					]
 				}
 			},

@@ -80,33 +80,18 @@ func updateMessage(store storage.Storage, router *gin.Engine) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		pers := &types.Client{}
-		err = json.Unmarshal(jsonData, pers)
+		msg := &types.Message{}
+		err = json.Unmarshal(jsonData, msg)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		store.EditParticipant(*pers, room)
+		store.EditMessage(*msg, room)
 		c.IndentedJSON(http.StatusOK, nil)
 	})
 }
 
-func deleteMessage(store storage.Storage, router *gin.Engine) {
-	router.DELETE("/v1/rooms/:roomId/messages", func(c *gin.Context) {
-		room := c.Param("roomId")
-		if !store.CheckRoom(room) {
-			c.IndentedJSON(http.StatusBadRequest, nil)
-			return
-		}
-		query := c.Request.URL.Query()
-		id := query.Get("id")
-		store.DeleteParticipant(id, room)
-		c.IndentedJSON(http.StatusOK, nil)
-	})
-}
-
-func AddMessagesRUDL(store storage.Storage, router *gin.Engine) {
+func AddMessagesRUL(store storage.Storage, router *gin.Engine) {
 	readMessage(store, router)
 	updateMessage(store, router)
-	deleteMessage(store, router)
 	listMessages(store, router)
 }

@@ -4,7 +4,7 @@ import "time"
 
 type Room struct {
 	ShortRoomInfo
-	Participants   []Client
+	Participants   []string
 	PinnedMessages []string
 }
 

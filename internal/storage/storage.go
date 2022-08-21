@@ -19,11 +19,11 @@ type MessageStorage interface {
 }
 
 type ParticipantStorage interface {
-	StoreParticipant(participant types.Client, room string)
-	ListParticipants(room string) types.ClientList
-	DeleteParticipant(uid, room string)
-	GetParticipant(uid, room string) types.Client
-	EditParticipant(participant types.Client, room string)
+	StoreParticipant(participant types.Client)
+	DeleteParticipant(uid string)
+	GetParticipant(uid string) types.Client
+	EditParticipant(participant types.Client)
+	ListParticipants() types.ClientList
 }
 
 type RoomsStorage interface {
@@ -33,6 +33,9 @@ type RoomsStorage interface {
 	AddRoom(room *types.Room)
 	EditRoom(prevName string, room *types.Room)
 	DeleteRoom(room string)
+	AddParticipantInRoom(patricipant string, room string)
+	ListParticipantsInRoom(room string) types.ClientList
+	DeleteParticipantInRoom(uid, room string)
 }
 
 type Searcher interface {

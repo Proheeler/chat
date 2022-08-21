@@ -32,7 +32,7 @@ func createRoom(store storage.Storage, router *gin.Engine) {
 		room.ID = id.String()
 		room.CreatedAt = time.Now()
 		room.UpdatedAt = time.Now()
-		room.Participants = []types.Client{}
+		room.Participants = []string{}
 		room.PinnedMessages = []string{}
 		store.AddRoom(room)
 		c.IndentedJSON(http.StatusCreated, nil)

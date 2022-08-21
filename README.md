@@ -1,6 +1,13 @@
-# Golang-realtime-chat-rooms
+# Realtime lightweight chat
+## Description
+Extra light chat using websockets+rest.
 
-### Start the server
-`go run *.go`
- 
-http://localhost:8080/room/1
+No limits on number of room participants.
+
+postman collection - chat.json
+
+## How to run
+```
+go mod download
+go build .
+```

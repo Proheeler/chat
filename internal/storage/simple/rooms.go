@@ -36,17 +36,18 @@ func (s *SimpleStorage) AddRoom(room *types.Room) {
 	}
 }
 
-func (s *SimpleStorage) EditRoom(room *types.Room) {
+func (s *SimpleStorage) EditRoom(prevName string, room *types.Room) {
 	s.rooms[room.Name] = types.Room{
 		ShortRoomInfo: types.ShortRoomInfo{
 			ID:        room.ID,
 			Name:      room.Name,
 			UpdatedAt: time.Now(),
-			CreatedAt: s.rooms[room.Name].CreatedAt,
+			CreatedAt: s.rooms[prevName].CreatedAt,
 		},
-		Participants:   s.rooms[room.Name].Participants,
-		PinnedMessages: s.rooms[room.Name].PinnedMessages,
+		Participants:   s.rooms[prevName].Participants,
+		PinnedMessages: s.rooms[prevName].PinnedMessages,
 	}
+	delete(s.rooms, prevName)
 }
 
 func (s *SimpleStorage) DeleteRoom(room string) {

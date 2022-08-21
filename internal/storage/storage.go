@@ -31,7 +31,7 @@ type RoomsStorage interface {
 	GetRoom(room string) *types.Room
 	CheckRoom(room string) bool
 	AddRoom(room *types.Room)
-	EditRoom(room *types.Room)
+	EditRoom(prevName string, room *types.Room)
 	DeleteRoom(room string)
 }
 

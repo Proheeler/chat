@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "ee196717-af60-41c1-88bb-947c62865b61",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getParticipants",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms/t/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"t",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteParticipant",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms/1/participants?id=a1ded7cb-775b-4f5b-803d-458a93f5823f",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"1",
+						"participants"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "a1ded7cb-775b-4f5b-803d-458a93f5823f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postParticipant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"CrmID\": \"id\",\n    \"Name\": \"test_name\",\n    \"Surname\": \"test_surname\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/v1/rooms/1/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"1",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createRoom",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\":\"t\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/v1/rooms",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getRoom",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms/t",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"t"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editRoom",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ID\": \"140dac4b-c5ff-4efc-bbdf-5cb582871beb\",\n    \"Name\": \"atata\",\n    \"CreatedAt\": \"2022-08-20T16:42:07.342279+03:00\",\n    \"UpdatedAt\": \"2022-08-20T16:42:07.34228+03:00\",\n    \"Participants\": [],\n    \"PinnedMessages\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/v1/rooms/t",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"t"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteRoom",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms?room=atata",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms"
+					],
+					"query": [
+						{
+							"key": "room",
+							"value": "atata"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listRooms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchMessage",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms/search?room=t&value=dfv",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"search"
+					],
+					"query": [
+						{
+							"key": "room",
+							"value": "t"
+						},
+						{
+							"key": "value",
+							"value": "dfv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "roomHistory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/v1/rooms/t/messages",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"v1",
+						"rooms",
+						"t",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

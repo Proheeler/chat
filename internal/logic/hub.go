@@ -2,13 +2,10 @@ package logic
 
 import (
 	"chat/internal/storage"
-	"chat/internal/storage/simple"
+	"chat/internal/storage/postgres"
 	"chat/internal/types"
 	"encoding/json"
 	"fmt"
-	"time"
-
-	"github.com/google/uuid"
 )
 
 type message struct {
@@ -47,7 +44,7 @@ func NewHub() *Hub {
 		unregister: make(chan Subscription),
 		rooms:      make(map[string]map[*connection]bool),
 		messages:   map[string][]string{},
-		storage:    simple.NewSimpleStorage(),
+		storage:    postgres.NewPostgresStorageStorage(),
 	}
 }
 
@@ -87,9 +84,9 @@ func (h *Hub) Run() {
 						fmt.Print(err.Error())
 						break
 					}
-					msg.ID = uuid.New().String()
-					msg.CreationTime = time.Now()
-					msg.EditTime = time.Now()
+					// msg.ID = uuid.New().String()
+					// msg.CreationTime = time.Now()
+					// msg.EditTime = time.Now()
 					h.storage.StoreMessage(*msg, m.room)
 				default:
 					close(c.send)

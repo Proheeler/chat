@@ -1,18 +1,19 @@
 package types
 
-import "time"
+import (
+	"github.com/lib/pq"
+	"gorm.io/gorm"
+)
 
 type Room struct {
+	gorm.Model
 	ShortRoomInfo
-	Participants   []string
-	PinnedMessages []string
+	Participants   pq.Int64Array `gorm:"type:integer[]"`
+	PinnedMessages pq.Int64Array `gorm:"type:integer[]"`
 }
 
 type ShortRoomInfo struct {
-	ID        string
-	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Name string
 }
 
 type ShortRoomInfoList struct {

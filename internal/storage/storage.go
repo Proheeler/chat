@@ -14,14 +14,14 @@ type Storage interface {
 type MessageStorage interface {
 	StoreMessage(msg types.Message, room string)
 	EditMessage(msg types.Message, room string)
-	GetMessage(uid, room string) types.Message
+	GetMessage(uid uint, room string) types.Message
 	ListMessages(room string) *types.MessageHistory
 }
 
 type ParticipantStorage interface {
 	StoreParticipant(participant types.Client)
-	DeleteParticipant(uid string)
-	GetParticipant(uid string) types.Client
+	DeleteParticipant(uid uint)
+	GetParticipant(uid uint) types.Client
 	EditParticipant(participant types.Client)
 	ListParticipants() types.ClientList
 }
@@ -33,9 +33,9 @@ type RoomsStorage interface {
 	AddRoom(room *types.Room)
 	EditRoom(prevName string, room *types.Room)
 	DeleteRoom(room string)
-	AddParticipantInRoom(patricipant string, room string)
+	AddParticipantInRoom(patricipant uint, room string)
 	ListParticipantsInRoom(room string) types.ClientList
-	DeleteParticipantInRoom(uid, room string)
+	DeleteParticipantInRoom(uid uint, room string)
 }
 
 type Searcher interface {

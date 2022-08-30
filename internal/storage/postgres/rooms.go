@@ -1,10 +1,10 @@
-package simple
+package postgres
 
 import (
 	"chat/internal/types"
 )
 
-func (s *SimpleStorage) ListRooms() []types.ShortRoomInfo {
+func (s *PostgresStorage) ListRooms() []types.ShortRoomInfo {
 	keys := make([]types.ShortRoomInfo, len(s.rooms))
 	i := 0
 	for k := range s.rooms {
@@ -14,12 +14,12 @@ func (s *SimpleStorage) ListRooms() []types.ShortRoomInfo {
 	return keys
 }
 
-func (s *SimpleStorage) CheckRoom(room string) bool {
+func (s *PostgresStorage) CheckRoom(room string) bool {
 	_, ok := s.rooms[room]
 	return ok
 }
 
-func (s *SimpleStorage) GetRoom(room string) *types.Room {
+func (s *PostgresStorage) GetRoom(room string) *types.Room {
 	rm, ok := s.rooms[room]
 	if !ok {
 		return nil
@@ -27,7 +27,7 @@ func (s *SimpleStorage) GetRoom(room string) *types.Room {
 	return &rm
 }
 
-func (s *SimpleStorage) AddRoom(room *types.Room) {
+func (s *PostgresStorage) AddRoom(room *types.Room) {
 	s.rooms[room.Name] = *room
 	s.history[room.Name] = &types.MessageHistory{
 		Total: 0,
@@ -35,7 +35,7 @@ func (s *SimpleStorage) AddRoom(room *types.Room) {
 	}
 }
 
-func (s *SimpleStorage) EditRoom(prevName string, room *types.Room) {
+func (s *PostgresStorage) EditRoom(prevName string, room *types.Room) {
 	s.rooms[room.Name] = types.Room{
 		ShortRoomInfo: types.ShortRoomInfo{
 			Name: room.Name,
@@ -46,6 +46,6 @@ func (s *SimpleStorage) EditRoom(prevName string, room *types.Room) {
 	delete(s.rooms, prevName)
 }
 
-func (s *SimpleStorage) DeleteRoom(room string) {
+func (s *PostgresStorage) DeleteRoom(room string) {
 	delete(s.rooms, room)
 }

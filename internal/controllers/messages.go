@@ -61,8 +61,12 @@ func readMessage(store storage.Storage, router *gin.Engine) {
 			return
 		}
 		messageID := c.Param("id")
-		msg := store.GetMessage(messageID, room)
-		if msg.ID == "" {
+		id, err := strconv.Atoi(messageID)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, err)
+		}
+		msg := store.GetMessage(uint(id), room)
+		if msg.ID == 0 {
 			c.IndentedJSON(http.StatusNotFound, nil)
 			return
 		}

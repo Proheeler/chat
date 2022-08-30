@@ -1,17 +1,19 @@
 package types
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Client struct {
-	ID         string
+	gorm.Model
 	ExternalID string
 	Name       string
 	Surname    string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Rooms      []string
-	IsActive   bool
-	LastSeen   time.Time
+	// Rooms pq.StringArray
+	IsActive bool
+	LastSeen time.Time
 }
 
 type ClientList struct {
@@ -20,5 +22,5 @@ type ClientList struct {
 }
 
 type Req struct {
-	ID string
+	ID uint
 }

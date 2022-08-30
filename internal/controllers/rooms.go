@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 func createRoom(store storage.Storage, router *gin.Engine) {
@@ -28,12 +28,10 @@ func createRoom(store storage.Storage, router *gin.Engine) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
-		id := uuid.New()
-		room.ID = id.String()
 		room.CreatedAt = time.Now()
 		room.UpdatedAt = time.Now()
-		room.Participants = []string{}
-		room.PinnedMessages = []string{}
+		room.Participants = pq.Int64Array{}
+		room.PinnedMessages = pq.Int64Array{}
 		store.AddRoom(room)
 		c.IndentedJSON(http.StatusCreated, nil)
 	})

@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func createParticipant(store storage.Storage, router *gin.Engine) {
@@ -24,8 +24,8 @@ func createParticipant(store storage.Storage, router *gin.Engine) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		id := uuid.New()
-		pers.ID = id.String()
+		// id := uuid.New()
+		// pers.ID = id.String()
 		pers.CreatedAt = time.Now()
 		pers.UpdatedAt = time.Now()
 		store.StoreParticipant(*pers)
@@ -42,8 +42,12 @@ func listParticipants(store storage.Storage, router *gin.Engine) {
 func readParticipant(store storage.Storage, router *gin.Engine) {
 	router.GET("/v1/participants/:id", func(c *gin.Context) {
 		clientID := c.Param("id")
-		part := store.GetParticipant(clientID)
-		if part.ID == "" {
+		ID, err := strconv.Atoi(clientID)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, err)
+		}
+		part := store.GetParticipant(uint(ID))
+		if part.ID == 0 {
 			c.IndentedJSON(http.StatusNotFound, nil)
 			return
 		}
@@ -75,7 +79,11 @@ func deleteParticipant(store storage.Storage, router *gin.Engine) {
 	router.DELETE("/v1/participants", func(c *gin.Context) {
 		query := c.Request.URL.Query()
 		id := query.Get("id")
-		store.DeleteParticipant(id)
+		ID, err := strconv.Atoi(id)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, err)
+		}
+		store.DeleteParticipant(uint(ID))
 		c.IndentedJSON(http.StatusOK, nil)
 	})
 }

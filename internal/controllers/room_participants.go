@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +28,6 @@ func createParticipantInRoom(store storage.Storage, router *gin.Engine) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-
 		store.AddParticipantInRoom(req.ID, room)
 		c.IndentedJSON(http.StatusCreated, nil)
 	})
@@ -53,7 +53,11 @@ func deleteParticipantInRoom(store storage.Storage, router *gin.Engine) {
 		}
 		query := c.Request.URL.Query()
 		id := query.Get("id")
-		store.DeleteParticipantInRoom(id, room)
+		ID, err := strconv.Atoi(id)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, err)
+		}
+		store.DeleteParticipantInRoom(uint(ID), room)
 		c.IndentedJSON(http.StatusOK, nil)
 	})
 }

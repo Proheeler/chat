@@ -1,10 +1,10 @@
-package simple
+package postgres
 
 import (
 	"chat/internal/types"
 )
 
-func (s *SimpleStorage) StoreMessage(msg types.Message, room string) {
+func (s *PostgresStorage) StoreMessage(msg types.Message, room string) {
 	if _, ok := s.history[room]; !ok {
 		s.history[room] = &types.MessageHistory{}
 	}
@@ -14,11 +14,11 @@ func (s *SimpleStorage) StoreMessage(msg types.Message, room string) {
 	}
 }
 
-func (s *SimpleStorage) ListMessages(room string) *types.MessageHistory {
+func (s *PostgresStorage) ListMessages(room string) *types.MessageHistory {
 	return s.history[room]
 }
 
-func (s *SimpleStorage) EditMessage(msg types.Message, room string) {
+func (s *PostgresStorage) EditMessage(msg types.Message, room string) {
 	history := s.history[room]
 	for i := range history.Data {
 		if history.Data[i].ID == msg.ID {
@@ -27,7 +27,7 @@ func (s *SimpleStorage) EditMessage(msg types.Message, room string) {
 	}
 }
 
-func (s *SimpleStorage) GetMessage(uid uint, room string) types.Message {
+func (s *PostgresStorage) GetMessage(uid uint, room string) types.Message {
 	history := s.history[room]
 	for i := range history.Data {
 		if history.Data[i].ID == uid {

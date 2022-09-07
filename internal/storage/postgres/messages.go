@@ -5,34 +5,24 @@ import (
 )
 
 func (s *PostgresStorage) StoreMessage(msg types.Message, room string) {
-	if _, ok := s.history[room]; !ok {
-		s.history[room] = &types.MessageHistory{}
-	}
-	s.history[room] = &types.MessageHistory{
-		Data:  append(s.history[room].Data, msg),
-		Total: s.history[room].Total + 1,
-	}
+	msg.Room = room
+	s.db.Save(&msg)
 }
 
 func (s *PostgresStorage) ListMessages(room string) *types.MessageHistory {
-	return s.history[room]
+	msgs := []types.Message{}
+	s.db.Where("room = ?", room).Find(&msgs)
+	return &types.MessageHistory{
+		Total: len(msgs),
+		Data:  msgs,
+	}
 }
 
 func (s *PostgresStorage) EditMessage(msg types.Message, room string) {
-	history := s.history[room]
-	for i := range history.Data {
-		if history.Data[i].ID == msg.ID {
-			history.Data[i] = msg
-		}
-	}
+	s.db.Save(&msg)
 }
-
 func (s *PostgresStorage) GetMessage(uid uint, room string) types.Message {
-	history := s.history[room]
-	for i := range history.Data {
-		if history.Data[i].ID == uid {
-			return history.Data[i]
-		}
-	}
-	return types.Message{}
+	msg := &types.Message{}
+	s.db.First(msg, uid)
+	return *msg
 }

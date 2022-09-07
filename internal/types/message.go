@@ -10,6 +10,7 @@ type Message struct {
 	Sender      string
 	ReplyTo     string
 	Data        string
+	Room        string
 	Attachments pq.Int64Array `gorm:"type:integer[]"`
 }
 

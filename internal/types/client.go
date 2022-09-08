@@ -11,7 +11,7 @@ type Client struct {
 	ExternalID string
 	Name       string
 	Surname    string
-	// Rooms pq.StringArray
+	// Rooms      pq.StringArray `gorm:"type:varchar(64)[]"`
 	IsActive bool
 	LastSeen time.Time
 }

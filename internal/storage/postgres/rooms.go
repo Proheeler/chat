@@ -4,35 +4,33 @@ import (
 	"chat/internal/types"
 )
 
-func (s *PostgresStorage) ListRooms() []types.ShortRoomInfo {
-	keys := make([]types.ShortRoomInfo, len(s.rooms))
-	i := 0
-	for k := range s.rooms {
-		keys[i] = s.rooms[k].ShortRoomInfo
-		i++
+func (s *PostgresStorage) ListRooms() *types.ShortRoomInfoList {
+	rooms := []types.Room{}
+	s.db.Find(&rooms)
+	return &types.ShortRoomInfoList{
+		Total: len(rooms),
+		Data:  rooms,
 	}
-	return keys
 }
 
 func (s *PostgresStorage) CheckRoom(room string) bool {
-	_, ok := s.rooms[room]
-	return ok
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+
+	return tx.Error == nil
 }
 
 func (s *PostgresStorage) GetRoom(room string) *types.Room {
-	rm, ok := s.rooms[room]
-	if !ok {
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+	if tx.Error != nil {
 		return nil
 	}
-	return &rm
+	return rm
 }
 
 func (s *PostgresStorage) AddRoom(room *types.Room) {
-	s.rooms[room.Name] = *room
-	s.history[room.Name] = &types.MessageHistory{
-		Total: 0,
-		Data:  []types.Message{},
-	}
+	s.db.Save(room)
 }
 
 func (s *PostgresStorage) EditRoom(prevName string, room *types.Room) {

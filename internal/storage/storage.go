@@ -27,7 +27,7 @@ type ParticipantStorage interface {
 }
 
 type RoomsStorage interface {
-	ListRooms() []types.ShortRoomInfo
+	ListRooms() *types.ShortRoomInfoList
 	GetRoom(room string) *types.Room
 	CheckRoom(room string) bool
 	AddRoom(room *types.Room)

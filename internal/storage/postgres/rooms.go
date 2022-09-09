@@ -34,16 +34,9 @@ func (s *PostgresStorage) AddRoom(room *types.Room) {
 }
 
 func (s *PostgresStorage) EditRoom(prevName string, room *types.Room) {
-	s.rooms[room.Name] = types.Room{
-		ShortRoomInfo: types.ShortRoomInfo{
-			Name: room.Name,
-		},
-		Participants:   s.rooms[prevName].Participants,
-		PinnedMessages: s.rooms[prevName].PinnedMessages,
-	}
-	delete(s.rooms, prevName)
+	s.db.Save(room)
 }
 
 func (s *PostgresStorage) DeleteRoom(room string) {
-	delete(s.rooms, room)
+	s.db.Where("name = ?", room).Delete(&types.Room{})
 }

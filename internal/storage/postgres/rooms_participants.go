@@ -24,9 +24,19 @@ func (s *PostgresStorage) AddParticipantInRoom(patricipant uint, room string) {
 }
 func (s *PostgresStorage) ListParticipantsInRoom(room string) types.ClientList {
 	var parts []types.Client
-	// for i := range s.rooms[room].Participants {
-	// 	parts = append(parts, s.clients[s.rooms[room].Participants[i]])
-	// }
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+	if tx.Error != nil {
+		return types.ClientList{
+			Data:  parts,
+			Total: len(parts),
+		}
+	}
+	cls := []uint{}
+	for i := range rm.Participants {
+		cls = append(cls, uint(rm.Participants[i]))
+	}
+	s.db.Where("id IN ?", cls).Find(&parts)
 	return types.ClientList{
 		Data:  parts,
 		Total: len(parts),

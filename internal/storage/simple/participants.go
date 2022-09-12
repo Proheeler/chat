@@ -4,12 +4,12 @@ import (
 	"chat/internal/types"
 )
 
-func (s *SimpleStorage) StoreParticipant(patricipant types.Client) {
-	s.clients[int64(patricipant.ID)] = patricipant
+func (s *SimpleStorage) StoreParticipant(participant types.Client) {
+	s.clients[participant.ID] = participant
 }
 
-func (s *SimpleStorage) GetParticipant(id int64) types.Client {
-	return s.clients[id]
+func (s *SimpleStorage) GetParticipant(uid uint) types.Client {
+	return s.clients[uid]
 }
 
 func (s *SimpleStorage) ListParticipants() types.ClientList {
@@ -27,12 +27,12 @@ func (s *SimpleStorage) EditParticipant(participant types.Client) {
 	pl := s.clients
 	for i := range pl {
 		if pl[i].ID == participant.ID {
-			s.clients[int64(participant.ID)] = participant
+			s.clients[participant.ID] = participant
 			break
 		}
 	}
 }
 
-func (s *SimpleStorage) DeleteParticipant(uid int64) {
+func (s *SimpleStorage) DeleteParticipant(uid uint) {
 	delete(s.clients, uid)
 }

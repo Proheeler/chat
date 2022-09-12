@@ -4,10 +4,10 @@ import (
 	"chat/internal/types"
 )
 
-func (s *SimpleStorage) AddParticipantInRoom(patricipant int64, room string) {
+func (s *SimpleStorage) AddParticipantInRoom(patricipant uint, room string) {
 	rm := s.rooms[room]
-	rm.Participants = append(s.rooms[room].Participants, patricipant)
-	part := s.clients[patricipant]
+	rm.Participants = append(s.rooms[room].Participants, int64(patricipant))
+	part := s.clients[uint(patricipant)]
 	// rooms := append(part.Rooms, room)
 	// part.Rooms = rooms
 	s.clients[patricipant] = part
@@ -16,7 +16,7 @@ func (s *SimpleStorage) AddParticipantInRoom(patricipant int64, room string) {
 func (s *SimpleStorage) ListParticipantsInRoom(room string) types.ClientList {
 	var parts []types.Client
 	for i := range s.rooms[room].Participants {
-		parts = append(parts, s.clients[s.rooms[room].Participants[i]])
+		parts = append(parts, s.clients[uint(s.rooms[room].Participants[i])])
 	}
 	return types.ClientList{
 		Data:  parts,
@@ -24,7 +24,7 @@ func (s *SimpleStorage) ListParticipantsInRoom(room string) types.ClientList {
 	}
 }
 
-func (s *SimpleStorage) DeleteParticipantInRoom(uid int64, room string) {
+func (s *SimpleStorage) DeleteParticipantInRoom(uid uint, room string) {
 	pl := s.rooms[room].Participants
 	rm := s.rooms[room]
 	for i := range pl {

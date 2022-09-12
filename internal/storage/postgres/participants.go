@@ -5,34 +5,28 @@ import (
 )
 
 func (s *PostgresStorage) StoreParticipant(patricipant types.Client) {
-	s.clients[patricipant.ID] = patricipant
+	s.db.Save(&patricipant)
 }
 
 func (s *PostgresStorage) GetParticipant(id uint) types.Client {
-	return s.clients[id]
+	cl := &types.Client{}
+	s.db.First(cl, id)
+	return *cl
 }
 
 func (s *PostgresStorage) ListParticipants() types.ClientList {
-	var parts []types.Client
-	for i := range s.clients {
-		parts = append(parts, s.clients[i])
-	}
+	cls := []types.Client{}
+	s.db.Find(&cls)
 	return types.ClientList{
-		Data:  parts,
-		Total: len(parts),
+		Total: len(cls),
+		Data:  cls,
 	}
 }
 
 func (s *PostgresStorage) EditParticipant(participant types.Client) {
-	pl := s.clients
-	for i := range pl {
-		if pl[i].ID == participant.ID {
-			s.clients[participant.ID] = participant
-			break
-		}
-	}
+	s.db.Save(&participant)
 }
 
 func (s *PostgresStorage) DeleteParticipant(uid uint) {
-	delete(s.clients, uid)
+	s.db.Delete(&types.Client{}, uid)
 }

@@ -4,14 +4,17 @@ import (
 	"chat/internal/types"
 )
 
-func (s *SimpleStorage) ListRooms() []types.ShortRoomInfo {
-	keys := make([]types.ShortRoomInfo, len(s.rooms))
+func (s *SimpleStorage) ListRooms() *types.ShortRoomInfoList {
+	keys := make([]types.Room, len(s.rooms))
 	i := 0
 	for k := range s.rooms {
-		keys[i] = s.rooms[k].ShortRoomInfo
+		keys[i] = s.rooms[k]
 		i++
 	}
-	return keys
+	return &types.ShortRoomInfoList{
+		Total: len(s.rooms),
+		Data:  keys,
+	}
 }
 
 func (s *SimpleStorage) CheckRoom(room string) bool {

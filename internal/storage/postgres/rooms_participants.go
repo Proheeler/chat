@@ -5,19 +5,38 @@ import (
 )
 
 func (s *PostgresStorage) AddParticipantInRoom(patricipant uint, room string) {
-	rm := s.rooms[room]
-	rm.Participants = append(s.rooms[room].Participants, int64(patricipant))
-	part := s.clients[patricipant]
-	// rooms := append(part.Rooms, room)
-	// part.Rooms = rooms
-	s.clients[patricipant] = part
-	s.rooms[room] = rm
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+	if tx.Error != nil {
+		return
+	}
+	isFound := false
+	for i := range rm.Participants {
+		if rm.Participants[i] == int64(patricipant) {
+			isFound = true
+			break
+		}
+	}
+	if !isFound {
+		rm.Participants = append(rm.Participants, int64(patricipant))
+		s.db.Save(rm)
+	}
 }
 func (s *PostgresStorage) ListParticipantsInRoom(room string) types.ClientList {
 	var parts []types.Client
-	// for i := range s.rooms[room].Participants {
-	// 	parts = append(parts, s.clients[s.rooms[room].Participants[i]])
-	// }
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+	if tx.Error != nil {
+		return types.ClientList{
+			Data:  parts,
+			Total: len(parts),
+		}
+	}
+	cls := []uint{}
+	for i := range rm.Participants {
+		cls = append(cls, uint(rm.Participants[i]))
+	}
+	s.db.Where("id IN ?", cls).Find(&parts)
 	return types.ClientList{
 		Data:  parts,
 		Total: len(parts),
@@ -25,29 +44,19 @@ func (s *PostgresStorage) ListParticipantsInRoom(room string) types.ClientList {
 }
 
 func (s *PostgresStorage) DeleteParticipantInRoom(uid uint, room string) {
-	// pl := s.rooms[room].Participants
-	rm := s.rooms[room]
-	// for i := range pl {
-	// 	if pl[i] == uid {
-	// 		rm.Participants = RemoveIndexUint(pl, i)
-	// 		break
-	// 	}
-	// }
-	s.rooms[room] = rm
-	cl := s.clients[uid]
-	// for i := range cl.Rooms {
-	// 	if rm.Name == cl.Rooms[i] {
-	// 		cl.Rooms = RemoveIndex(cl.Rooms, i)
-	// 		break
-	// 	}
-	// }
-	s.clients[uid] = cl
+	rm := &types.Room{}
+	tx := s.db.Where("name = ?", room).Find(rm)
+	if tx.Error != nil {
+		return
+	}
+	for i := range rm.Participants {
+		if rm.Participants[i] == int64(uid) {
+			rm.Participants = RemoveIndex(rm.Participants, i)
+			s.db.Save(rm)
+		}
+	}
 }
 
-func RemoveIndex(s []string, index int) []string {
-	return append(s[:index], s[index+1:]...)
-}
-
-func RemoveIndexUint(s []uint, index int) []uint {
+func RemoveIndex(s []int64, index int) []int64 {
 	return append(s[:index], s[index+1:]...)
 }

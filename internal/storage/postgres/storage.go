@@ -8,10 +8,7 @@ import (
 )
 
 type PostgresStorage struct {
-	db      *gorm.DB
-	rooms   map[string]types.Room
-	history map[string]*types.MessageHistory
-	clients map[uint]types.Client
+	db *gorm.DB
 }
 
 func NewPostgresStorageStorage() *PostgresStorage {
@@ -22,9 +19,6 @@ func NewPostgresStorageStorage() *PostgresStorage {
 	}
 	db.AutoMigrate(&types.Client{}, &types.Media{}, &types.Message{}, &types.Room{})
 	return &PostgresStorage{
-		db:      db,
-		rooms:   map[string]types.Room{},
-		history: map[string]*types.MessageHistory{},
-		clients: map[uint]types.Client{},
+		db: db,
 	}
 }

@@ -84,10 +84,7 @@ func deleteRoom(store storage.Storage, router *gin.Engine) {
 func listRooms(store storage.Storage, router *gin.Engine) {
 	router.GET("/v1/rooms", func(c *gin.Context) {
 		rooms := store.ListRooms()
-		c.IndentedJSON(http.StatusOK, types.ShortRoomInfoList{
-			Total: len(rooms),
-			Data:  rooms,
-		})
+		c.IndentedJSON(http.StatusOK, *rooms)
 	})
 }
 

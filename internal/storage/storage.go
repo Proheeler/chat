@@ -27,7 +27,7 @@ type ParticipantStorage interface {
 }
 
 type RoomsStorage interface {
-	ListRooms() []types.ShortRoomInfo
+	ListRooms() *types.ShortRoomInfoList
 	GetRoom(room string) *types.Room
 	CheckRoom(room string) bool
 	AddRoom(room *types.Room)
@@ -39,8 +39,8 @@ type RoomsStorage interface {
 }
 
 type Searcher interface {
-	Search(val, room string) []int
-	GlobalSearch(val string) map[string][]int
+	Search(val, room string) []types.Message
+	GlobalSearch(val string) map[string][]types.Message
 }
 
 type FileStorage interface {

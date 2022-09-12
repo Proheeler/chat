@@ -18,5 +18,5 @@ type ShortRoomInfo struct {
 
 type ShortRoomInfoList struct {
 	Total int
-	Data  []ShortRoomInfo
+	Data  []Room
 }

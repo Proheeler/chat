@@ -15,7 +15,7 @@ type MessageStorage interface {
 	StoreMessage(msg types.Message, room string)
 	EditMessage(msg types.Message, room string)
 	GetMessage(uid uint, room string) types.Message
-	ListMessages(room string) *types.MessageHistory
+	ListMessages(room string, offset, limit int) *types.MessageHistory
 }
 
 type ParticipantStorage interface {

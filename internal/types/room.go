@@ -13,7 +13,7 @@ type Room struct {
 }
 
 type ShortRoomInfo struct {
-	Name string
+	Name string `gorm:"unique"`
 }
 
 type ShortRoomInfoList struct {

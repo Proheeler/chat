@@ -30,8 +30,8 @@ type RoomsStorage interface {
 	ListRooms() *types.ShortRoomInfoList
 	GetRoom(room string) *types.Room
 	CheckRoom(room string) bool
-	AddRoom(room *types.Room)
-	EditRoom(prevName string, room *types.Room)
+	AddRoom(room *types.Room) error
+	EditRoom(prevName string, room *types.Room) error
 	DeleteRoom(room string)
 	AddParticipantInRoom(patricipant uint, room string)
 	ListParticipantsInRoom(room string) types.ClientList

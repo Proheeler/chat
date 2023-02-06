@@ -28,11 +28,21 @@ func createRoom(store storage.Storage, router *gin.Engine) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
+		if room.Name == "" {
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
 		room.CreatedAt = time.Now()
 		room.UpdatedAt = time.Now()
 		room.Participants = pq.Int64Array{}
 		room.PinnedMessages = pq.Int64Array{}
-		store.AddRoom(room)
+		err = store.AddRoom(room)
+		if err != nil {
+			c.Error(err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": err.Error()})
+			// c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
 		c.IndentedJSON(http.StatusCreated, nil)
 	})
 }
@@ -44,7 +54,12 @@ func readRoom(store storage.Storage, router *gin.Engine) {
 			c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
-		c.IndentedJSON(http.StatusOK, store.GetRoom(room))
+		rm := store.GetRoom(room)
+		if rm == nil || rm.Name == "" {
+			c.IndentedJSON(http.StatusNotFound, nil)
+			return
+		}
+		c.IndentedJSON(http.StatusOK, rm)
 	})
 }
 
@@ -53,17 +68,27 @@ func updateRoom(store storage.Storage, router *gin.Engine) {
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		if err != nil {
 			fmt.Println(err.Error())
-			c.IndentedJSON(http.StatusBadRequest, nil)
+			c.Error(err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": err.Error()})
+			// c.IndentedJSON(http.StatusBadRequest, nil)
 		}
 		room := &types.Room{}
 		err = json.Unmarshal(jsonData, room)
 		if err != nil {
 			fmt.Println(err.Error())
-			c.IndentedJSON(http.StatusBadRequest, nil)
+			c.Error(err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": err.Error()})
+			// c.IndentedJSON(http.StatusBadRequest, nil)
 			return
 		}
 		roomId := c.Param("roomId")
-		store.EditRoom(roomId, room)
+		err = store.EditRoom(roomId, room)
+		if err != nil {
+			c.Error(err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": err.Error()})
+			// c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
 		c.IndentedJSON(http.StatusOK, nil)
 	})
 }

@@ -18,14 +18,21 @@ func createParticipant(store storage.Storage, router *gin.Engine) {
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
 		if err != nil {
 			fmt.Println(err.Error())
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
 		}
 		pers := &types.Client{}
 		err = json.Unmarshal(jsonData, pers)
 		if err != nil {
 			fmt.Println(err.Error())
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
 		}
-		// id := uuid.New()
-		// pers.ID = id.String()
+		if pers.Name == "" {
+			c.IndentedJSON(http.StatusBadRequest, nil)
+			return
+		}
+
 		pers.CreatedAt = time.Now()
 		pers.UpdatedAt = time.Now()
 		store.StoreParticipant(*pers)
@@ -40,8 +47,8 @@ func listParticipants(store storage.Storage, router *gin.Engine) {
 }
 
 func readParticipant(store storage.Storage, router *gin.Engine) {
-	router.GET("/v1/participants/:id", func(c *gin.Context) {
-		clientID := c.Param("id")
+	router.GET("/v1/participants/:external_id", func(c *gin.Context) {
+		clientID := c.Param("external_id")
 		ID, err := strconv.Atoi(clientID)
 		if err != nil {
 			c.IndentedJSON(http.StatusBadRequest, err)

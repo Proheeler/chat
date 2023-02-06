@@ -10,7 +10,7 @@ func (s *PostgresStorage) StoreParticipant(patricipant types.Client) {
 
 func (s *PostgresStorage) GetParticipant(id uint) types.Client {
 	cl := &types.Client{}
-	s.db.First(cl, id)
+	s.db.Where("external_id = ?", id).Find(cl)
 	return *cl
 }
 

@@ -21,7 +21,14 @@ func (s *PostgresStorage) ListMessages(room string, offset, limit int) *types.Me
 		offset = int(count) / limit
 		limit = int(count) % limit
 	}
-	s.db.Order("id desc").Limit(limit).Offset(offset).Where("room = ?", room).Find(&msgs)
+	from := int(count) - limit*offset
+	to := int(count) - limit*offset - limit
+	if to < 0 {
+		to = 0
+	}
+	s.db.Model(types.Message{}).Where("room = ? AND ID < ? AND ID > ?",
+		room, from, to).Order("ID Desc").Find(&msgs)
+	// s.db.Limit(limit).Offset(offset).Where("room = ?", room).Order("ID desc").Find(&msgs)
 	return &types.MessageHistory{
 		Total: len(msgs),
 		Data:  msgs,

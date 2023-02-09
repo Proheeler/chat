@@ -49,11 +49,7 @@ func listParticipants(store storage.Storage, router *gin.Engine) {
 func readParticipant(store storage.Storage, router *gin.Engine) {
 	router.GET("/v1/participants/:external_id", func(c *gin.Context) {
 		clientID := c.Param("external_id")
-		ID, err := strconv.Atoi(clientID)
-		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, err)
-		}
-		part := store.GetParticipant(uint(ID))
+		part := store.GetParticipant(clientID)
 		if part.ID == 0 {
 			c.IndentedJSON(http.StatusNotFound, nil)
 			return

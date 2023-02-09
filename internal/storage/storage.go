@@ -21,7 +21,7 @@ type MessageStorage interface {
 type ParticipantStorage interface {
 	StoreParticipant(participant types.Client)
 	DeleteParticipant(uid uint)
-	GetParticipant(uid uint) types.Client
+	GetParticipant(external_id string) types.Client
 	EditParticipant(participant types.Client)
 	ListParticipants() types.ClientList
 }

@@ -43,7 +43,7 @@ func listMessages(store storage.Storage, router *gin.Engine) {
 		}
 		c.IndentedJSON(http.StatusOK,
 			types.MessageHistory{
-				Data:  history.Data[offset : offset+limit],
+				Data:  history.Data,
 				Total: len(history.Data),
 			})
 	})

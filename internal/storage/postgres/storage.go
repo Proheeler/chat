@@ -12,7 +12,7 @@ type PostgresStorage struct {
 }
 
 func NewPostgresStorageStorage() *PostgresStorage {
-	dsn := "host=localhost user=postgres password=dev dbname=chat port=5432 sslmode=disable TimeZone=Europe/Moscow"
+	dsn := "host=localhost user=postgres password=postgres dbname=chat port=5432 sslmode=disable TimeZone=Europe/Moscow"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil

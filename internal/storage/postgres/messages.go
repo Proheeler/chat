@@ -2,11 +2,15 @@ package postgres
 
 import (
 	"chat/internal/types"
+	"log"
 )
 
 func (s *PostgresStorage) StoreMessage(msg types.Message, room string) {
 	msg.Room = room
-	s.db.Save(&msg)
+	tx := s.db.Save(&msg)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+	}
 }
 
 func (s *PostgresStorage) ListMessages(room string, offset, limit int) *types.MessageHistory {

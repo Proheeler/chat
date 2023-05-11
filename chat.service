@@ -1,0 +1,12 @@
+[Unit]
+Description=chat
+Requires=postgresql.service
+After=postgresql.service
+[Service]
+WorkingDirectory=/opt/chat
+ExecStart=/opt/chat/chat
+ExecReload=/opt/chat/chat
+TimeoutSec=300
+Restart=always
+[Install]
+WantedBy=multi-user.target

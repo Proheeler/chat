@@ -22,7 +22,16 @@ func listMessages(store storage.Storage, router *gin.Engine) {
 		query := c.Request.URL.Query()
 		offset := 0
 		limit := 100
-		history := store.ListMessages(roomId)
+		offst := query.Get("offset")
+
+		if val, err := strconv.Atoi(offst); offst != "" && err == nil {
+			offset = val
+		}
+		lmt := query.Get("limit")
+		if val, err := strconv.Atoi(lmt); lmt != "" && err == nil {
+			limit = val
+		}
+		history := store.ListMessages(roomId, offset, limit)
 		if history == nil {
 			c.IndentedJSON(http.StatusBadRequest,
 				nil)
@@ -32,22 +41,9 @@ func listMessages(store storage.Storage, router *gin.Engine) {
 		if limit > msgLen {
 			limit = msgLen
 		}
-		offst := query.Get("offset")
-
-		if val, err := strconv.Atoi(offst); offst != "" && err == nil {
-			if val < msgLen {
-				offset = val
-			}
-		}
-		lmt := query.Get("limit")
-		if val, err := strconv.Atoi(lmt); lmt != "" && err == nil {
-			if val < msgLen {
-				limit = val
-			}
-		}
 		c.IndentedJSON(http.StatusOK,
 			types.MessageHistory{
-				Data:  history.Data[offset : offset+limit],
+				Data:  history.Data,
 				Total: len(history.Data),
 			})
 	})

@@ -42,5 +42,6 @@ func (a *App) Run() {
 		logic.ServeWs(c.Writer, c.Request, roomId, a.H)
 	})
 
-	router.Run("0.0.0.0:9080")
+	router.RunTLS("0.0.0.0:9999", "/etc/letsencrypt/live/mvp02.ditar.ru/fullchain.pem",
+		"/etc/letsencrypt/live/mvp02.ditar.ru/privkey.pem")
 }

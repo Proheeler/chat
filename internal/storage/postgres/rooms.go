@@ -29,12 +29,14 @@ func (s *PostgresStorage) GetRoom(room string) *types.Room {
 	return rm
 }
 
-func (s *PostgresStorage) AddRoom(room *types.Room) {
-	s.db.Save(room)
+func (s *PostgresStorage) AddRoom(room *types.Room) error {
+	tx := s.db.Save(room)
+	return tx.Error
 }
 
-func (s *PostgresStorage) EditRoom(prevName string, room *types.Room) {
-	s.db.Save(room)
+func (s *PostgresStorage) EditRoom(prevName string, room *types.Room) error {
+	tx := s.db.Save(room)
+	return tx.Error
 }
 
 func (s *PostgresStorage) DeleteRoom(room string) {

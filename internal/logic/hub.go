@@ -75,19 +75,21 @@ func (h *Hub) Run() {
 			}
 		case m := <-h.broadcast:
 			connections := h.rooms[m.room]
+			stored := false
 			for c := range connections {
 				select {
 				case c.send <- m.data:
-					msg := &types.Message{}
-					err := json.Unmarshal(m.data, msg)
-					if err != nil {
-						fmt.Print(err.Error())
-						break
+					if !stored {
+						msg := &types.Message{}
+						err := json.Unmarshal(m.data, msg)
+						if err != nil {
+							fmt.Print(err.Error())
+							break
+						}
+						h.storage.StoreMessage(*msg, m.room)
+						stored = true
 					}
-					// msg.ID = uuid.New().String()
-					// msg.CreationTime = time.Now()
-					// msg.EditTime = time.Now()
-					h.storage.StoreMessage(*msg, m.room)
+
 				default:
 					close(c.send)
 					delete(connections, c)
